@@ -190,10 +190,10 @@ const RecentConnectionsCard = () => {
           <tr>
             <th className="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sl. No</th>
             <th className="w-6/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-            <th className="w-5/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skilled Sector</th>
+            <th className="w-5/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skilled Sector Technology</th>
           </tr>
         </thead>
-        <tbody className="bg-purple-50 divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 bg-white">
           {recentConnections.map((connection, index) => (
             <tr key={connection.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
@@ -203,54 +203,49 @@ const RecentConnectionsCard = () => {
           ))}
         </tbody>
       </table>
-      <div className="flex items-center justify-end mt-4 text-gray-400">
-        <AiOutlineInfoCircle className="mr-2" />
-        <span>Last Updated 16-07-2024</span>
-      </div>
     </div>
   );
 };
 
-const MapCard = () => {
-  const mapRef = useRef();
+const TechnologyTrendingCard = () => {
+  const defaultPosition = [12.9716, 77.5946]; // Default position for India
+  const mapBounds = [
+    [-82.8628, 135.0000], // Southwest coordinates (South)
+    [71.7069, 42.6043], // Northeast coordinates (North)
+    [66.0272, -169.7022], // Southeast coordinates (East)
+    [52.1307, -3.7837] // Northwest coordinates (West)
+  ];
 
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.invalidateSize();
-    }
-  }, []);
-
-  const handleMarkerClick = (marker) => {
-    console.log(marker.title); // Handle marker click logic here
+  const createCustomIcon = (image) => {
+    return L.icon({
+      iconUrl: image,
+      iconSize: [25, 25], // Size of the icon
+      iconAnchor: [12, 24], // Point of the icon which will correspond to marker's location
+      popupAnchor: [0, -24] // Point from which the popup should open relative to the iconAnchor
+    });
   };
 
   return (
-    <div className="m-5 p-4 rounded-xl shadow-lg bg-purple-50 w-full md:w-1/2">
-      <h2 className="text-2xl text-gray-400 mb-4 text-center font-semibold">Map</h2>
-      <div className="h-80 md:h-96 lg:h-80">
+    <div className="m-5 p-4 rounded-xl shadow-lg bg-purple-50 w-full lg:w-1/2">
+      <h2 className="text-xl sm:text-2xl text-gray-400 mb-4 text-center font-semibold">Technology Trending</h2>
+      <div className="flex justify-center">
         <MapContainer
-          center={[20.5937, 78.9629]}
-          zoom={2}
-          scrollWheelZoom={false}
-          className="h-full"
-          whenCreated={(mapInstance) => (mapRef.current = mapInstance)}
+          center={defaultPosition}
+          zoom={5}
+          style={{ height: '400px', width: '100%' }}
+          maxBounds={mapBounds}
+          maxBoundsViscosity={1.0} // Ensure the map is kept within bounds
+          minZoom={3} // Adjust minZoom to prevent zooming out too far
         >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {markerData.map((marker, index) => (
-            <Marker
-              key={index}
-              position={marker.position}
-              icon={createCustomIcon(marker.image)}
-              eventHandlers={{
-                click: () => handleMarkerClick(marker),
-              }}
-            >
-              <Popup>
-                <div className="text-center">
-                  <img src={marker.image} alt={marker.title} className="w-10 h-10 mx-auto mb-2" />
-                  <h3 className="text-lg">{marker.title}</h3>
-                </div>
-              </Popup>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxZoom={12}
+            noWrap={true} // Prevents the map from repeating
+          />
+           {markerData.map((marker, index) => (
+            <Marker key={index} position={marker.position} icon={createCustomIcon(marker.image)}>
+              <Popup>{marker.title}</Popup>
             </Marker>
           ))}
         </MapContainer>
@@ -261,18 +256,26 @@ const MapCard = () => {
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen flex flex-wrap justify-center items-start bg-gray-100">
-      <div className="flex flex-wrap justify-center w-full lg:w-2/3">
-        <Card title="Files Uploaded" Icon={AiOutlineFileText} number={64} />
-        <Card title="Pending" Icon={MdOutlinePendingActions} number={10} />
-        <Card title="Completed" Icon={TiTick} number={35} />
-        <Card title="In-Progress" Icon={TiUpload} number={50} />
+    <div className="flex flex-wrap items-end max-w-screen min-h-screen p-4 bg-blue-50">
+      <div className="flex items-end mb-4">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
+          <span className="mr-2 font font-bold">Download Report</span>
+          <TiUpload className="ml-2" />
+        </button>
       </div>
-      <div className="flex flex-wrap justify-center w-full lg:w-2/3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 md:gap-12 lg:gap-16 w-full mb-4 space-x-4 font font-semibold">
+        <Card title="Projects" Icon={AiOutlineFileText} number={178} />
+        <Card title="Pending" Icon={MdOutlinePendingActions} number={50} />
+        <Card title="Completed" Icon={TiTick} number={100} />
+        <Card title="Posted" Icon={TiUpload} number={73} />
+      </div>
+      <div className="flex flex-row justify-center w-full space-x-10">
         <GraphCard />
         <JobTable />
+      </div>
+      <div className="flex flex-row justify-center w-full space-x-10">
         <RecentConnectionsCard />
-        <MapCard />
+        <TechnologyTrendingCard />
       </div>
     </div>
   );
