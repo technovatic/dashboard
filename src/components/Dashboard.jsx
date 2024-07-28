@@ -246,7 +246,7 @@ const Dashboard = () => {
           <TiUpload className="ml-2" />
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-4 font-semibold">
         <Card title="Projects" Icon={AiOutlineFileText} number={178} />
         <Card title="Pending" Icon={MdOutlinePendingActions} number={50} />
         <Card title="Completed" Icon={TiTick} number={100} />
