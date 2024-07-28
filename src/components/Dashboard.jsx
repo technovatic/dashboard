@@ -239,6 +239,7 @@ const TechnologyTrendingCard = () => {
 
 const Dashboard = () => {
   return (
+    <>
     <div className="flex flex-wrap items-center min-w-full min-h-screen p-4 bg-blue-50">
       <div className="flex items-end mb-4">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
@@ -246,7 +247,7 @@ const Dashboard = () => {
           <TiUpload className="ml-2" />
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-4 font-semibold">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-4">
         <Card title="Projects" Icon={AiOutlineFileText} number={178} />
         <Card title="Pending" Icon={MdOutlinePendingActions} number={50} />
         <Card title="Completed" Icon={TiTick} number={100} />
@@ -261,6 +262,7 @@ const Dashboard = () => {
         <TechnologyTrendingCard />
       </div>
     </div>
+    </>
   );
 };
 
